@@ -2,10 +2,19 @@
 - name: Install MySQL
   apt: name={{ item }} state=latest update_cache=true
   with_items:
-    - python-mysqldb
     - mysql-server
     - mysql-client
     - libmysqlclient-dev
+
+- name: Install pip
+  apt:
+    name: python3-pip
+    state: present
+
+- name: Install PyMySQL
+  pip:
+    name: pymysql
+    state: present
 
 - name: Ensure MySQL service is up
   service: name=mysql state=started
@@ -17,29 +26,30 @@
     owner=root
     mode=0600
 
-- name: Update MySQL root password for all root accounts
-  mysql_user: name=root
-              host={{ item }}
-              password={{ mysql_root_db_password }}
+- name: Set password for root user
+  mysql_user:
+    login_user: "root"
+    login_password: ''
+    name: "root"
+    password: "{{ mysql_root_password }}"
+    priv: '*.*:ALL,GRANT'
+    host: 'localhost'
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    state: present
   with_items:
-    - 127.0.0.1
-    - ::1
-    - localhost
-
-- name: Ensure anonymous users are not in the database
-  mysql_user: name='' host={{ item }} state=absent
-  with_items:
-    - $inventory_hostname
-    - $ansible_hostname
-    - localhost
+  - 127.0.0.1
+  - ::1
+  - localhost
 
 - name: Create MySQL Database
-  mysql_db: name={{ deploy_app_name }}
-            state=present
-            encoding=utf8mb4
+  mysql_db:
+    name: "{{ deploy_app_name }}"
+    state: present
+    encoding: utf8mb4
+    login_unix_socket: /var/run/mysqld/mysqld.sock
 
 - name: Create MySQL User
   mysql_user: name={{ deploy_app_name }}
               priv={{ deploy_app_name }}.*:ALL
               state=present
-              password="{{ mysql_app_db_password }}"
+              login_unix_socket="/var/run/mysqld/mysqld.sock"

@@ -1,21 +1,27 @@
 - name: Install Tools
   apt: name={{ item }} state=latest update_cache=true
   with_items:
-    - build-essential
-    - tmux
-    - vim
-    - htop
-    - git-core
-    - wget
-    - zlib1g-dev
-    - libssl-dev
-    - libreadline-dev
-    - libyaml-dev
-    - libxml2-dev
-    - libxslt1-dev
-    - libffi-dev
-    - curl
-    - libcurl3
-    - libcurl3-gnutls
-    - libcurl4-openssl-dev
-    - nodejs
+    - lsb-core 
+    - git 
+    - git-core 
+    - gcc 
+    - make 
+    - imagemagick 
+    - libmagickwand-dev 
+    - libcurl4-openssl-dev 
+    - autoconf 
+    - bison 
+    - build-essential 
+    - libssl-dev 
+    - libyaml-dev 
+    - libxml2-dev 
+    - libxslt1-dev 
+    - libreadline-dev 
+    - zlib1g 
+    - zlib1g-dev 
+    - libncurses5-dev 
+    - libffi-dev 
+    - libgdbm-dev
+    - locales-all
+    - certbot
+    - python3-certbot-nginx

@@ -3,5 +3,5 @@ production:
   encoding: utf8
   database: {{ deploy_app_name }}
   username: {{ deploy_app_name }}
-  password: {{ mysql_app_db_password }}
+  password: {{ mysql_root_password }}
   host: localhost
